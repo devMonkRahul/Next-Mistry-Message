@@ -22,11 +22,12 @@ export default function SignInPage() {
     const [isCheckingUsername, setIsCheckingUsername] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [debouncedValue, setValue] = useDebounceValue(username, 500)
+    const [isUsernameUnique, setIsUsernameUnique] = useState(false);
 
     const router = useRouter();
 
     //Zod implementation
-    const form = useForm<z.infer<typeof signUpSchema>>({
+    const form = useForm<z.infer<typeof signUpSchema>>({ 
       resolver: zodResolver(signUpSchema),
       defaultValues: {
         username: "",
@@ -37,13 +38,15 @@ export default function SignInPage() {
 
     useEffect(() => {
       const checkUniqueUsername = async () => {
-        if (debouncedValue) {
+        if (debouncedValue && debouncedValue.length > 3) {
           setIsCheckingUsername(true);
           setUsernameMessage("");
+          setIsUsernameUnique(false);
           try {
             const response = await axios.get(`/api/check-unique-username?username=${debouncedValue}`);
             if (response.data.success) {
               setUsernameMessage(response.data.message);
+              setIsUsernameUnique(true);
             }
           } catch (error: any) {
             const axiosError = error as AxiosError<ApiResponse>;
@@ -105,6 +108,9 @@ export default function SignInPage() {
                       }}
                     />
                   </FormControl>
+                  {isCheckingUsername && <Loader2 className="animate-spin"/>}
+                  {!isCheckingUsername && debouncedValue.length > 3 && <p className={`text-sm ${isUsernameUnique ? "text-green-500" : "text-red-500"}`}>{usernameMessage}</p>}
+                  {debouncedValue.length > 0 && debouncedValue.length <= 3 && <p className="text-sm text-red-500">Username must be at least 4 characters long</p>}
                   <FormMessage />
                 </FormItem>
               )}
