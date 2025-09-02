@@ -20,6 +20,8 @@ export async function middleware(request: NextRequest) {
     if (!token && url.pathname.startsWith("/dashboard")) {
         return NextResponse.redirect(new URL("/signIn", request.url))
     }
+
+    return NextResponse.next();
 }
 
 export const config = {

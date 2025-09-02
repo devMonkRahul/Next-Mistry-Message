@@ -17,71 +17,71 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
 export default function SignInPage() {
-    const [username, setUsername] = useState("");
-    const [usernameMessage, setUsernameMessage] = useState("");
-    const [isCheckingUsername, setIsCheckingUsername] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [debouncedValue, setValue] = useDebounceValue(username, 500)
-    const [isUsernameUnique, setIsUsernameUnique] = useState(false);
+  const [username, setUsername] = useState("");
+  const [usernameMessage, setUsernameMessage] = useState("");
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [debouncedValue, setValue] = useDebounceValue(username, 500)
+  const [isUsernameUnique, setIsUsernameUnique] = useState(false);
 
-    const router = useRouter();
+  const router = useRouter();
 
-    //Zod implementation
-    const form = useForm<z.infer<typeof signUpSchema>>({ 
-      resolver: zodResolver(signUpSchema),
-      defaultValues: {
-        username: "",
-        email: "",
-        password: "",
-      }
-    });
-
-    useEffect(() => {
-      const checkUniqueUsername = async () => {
-        if (debouncedValue && debouncedValue.length > 3) {
-          setIsCheckingUsername(true);
-          setUsernameMessage("");
-          setIsUsernameUnique(false);
-          try {
-            const response = await axios.get(`/api/check-unique-username?username=${debouncedValue}`);
-            if (response.data.success) {
-              setUsernameMessage(response.data.message);
-              setIsUsernameUnique(true);
-            }
-          } catch (error: any) {
-            const axiosError = error as AxiosError<ApiResponse>;
-            setUsernameMessage(
-              axiosError.response?.data.message ?? "Error checking username"
-            )
-          } finally {
-            setIsCheckingUsername(false);
-          }
-        }
-      };
-      checkUniqueUsername();
-    }, [debouncedValue]);
-
-    const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
-      setIsSubmitting(true);
-      try {
-        console.log("Data", data);
-        
-        const response = await axios.post<ApiResponse>("/api/signup", data);
-        toast.success(response.data.message);
-        router.replace(`/verify/${username}`);
-      } catch (error) {
-        console.error("Error in SignUp: ", error)
-        const axiosError = error as AxiosError<ApiResponse>;
-        let errorMessage = axiosError.response?.data.message ?? "Error in SignUp";
-        toast.error(errorMessage);
-      } finally {
-        setIsSubmitting(false);
-      }
+  //Zod implementation
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
     }
+  });
+
+  useEffect(() => {
+    const checkUniqueUsername = async () => {
+      if (debouncedValue && debouncedValue.length > 2) {
+        setIsCheckingUsername(true);
+        setUsernameMessage("");
+        setIsUsernameUnique(false);
+        try {
+          const response = await axios.get(`/api/check-unique-username?username=${debouncedValue}`);
+          if (response.data.success) {
+            setUsernameMessage(response.data.message);
+            setIsUsernameUnique(true);
+          }
+        } catch (error: any) {
+          const axiosError = error as AxiosError<ApiResponse>;
+          setUsernameMessage(
+            axiosError.response?.data.message ?? "Error checking username"
+          )
+        } finally {
+          setIsCheckingUsername(false);
+        }
+      }
+    };
+    checkUniqueUsername();
+  }, [debouncedValue]);
+
+  const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
+    setIsSubmitting(true);
+    try {
+      console.log("Data", data);
+
+      const response = await axios.post<ApiResponse>("/api/signup", data);
+      toast.success(response.data.message);
+      router.replace(`/verify/${username}`);
+    } catch (error) {
+      console.error("Error in SignUp: ", error)
+      const axiosError = error as AxiosError<ApiResponse>;
+      let errorMessage = axiosError.response?.data.message ?? "Error in SignUp";
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-background">
+      <div className="w-full max-w-md p-8 space-y-8 rounded-lg bg-card shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
             Join Mystery Message
@@ -92,15 +92,15 @@ export default function SignInPage() {
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField 
+            <FormField
               control={form.control}
               name="username"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Username" 
+                    <Input
+                      placeholder="Username"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -108,22 +108,22 @@ export default function SignInPage() {
                       }}
                     />
                   </FormControl>
-                  {isCheckingUsername && <Loader2 className="animate-spin"/>}
-                  {!isCheckingUsername && debouncedValue.length > 3 && <p className={`text-sm ${isUsernameUnique ? "text-green-500" : "text-red-500"}`}>{usernameMessage}</p>}
-                  {debouncedValue.length > 0 && debouncedValue.length <= 3 && <p className="text-sm text-red-500">Username must be at least 4 characters long</p>}
+                  {isCheckingUsername && <Loader2 className="animate-spin" />}
+                  {!isCheckingUsername && debouncedValue.length > 2 && <p className={`text-sm ${isUsernameUnique ? "text-green-500" : "text-red-500"}`}>{usernameMessage}</p>}
+                  {debouncedValue.length > 0 && debouncedValue.length <= 2 && <p className="text-sm text-red-500">Username must be at least 4 characters long</p>}
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField 
+            <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Email" 
+                    <Input
+                      placeholder="Email"
                       {...field}
                     />
                   </FormControl>
@@ -131,16 +131,16 @@ export default function SignInPage() {
                 </FormItem>
               )}
             />
-            <FormField 
+            <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input 
+                    <Input
                       type="password"
-                      placeholder="Password" 
+                      placeholder="Password"
                       {...field}
                     />
                   </FormControl>
