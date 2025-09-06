@@ -26,6 +26,7 @@ import { Message } from "@/model/User.model"
 import toast from "react-hot-toast"
 import axios from "axios"
 import { ApiResponse } from "@/types/ApiResponse"
+import dayjs from "dayjs";
 
 type MessageCardProps = {
     message: Message
@@ -33,7 +34,7 @@ type MessageCardProps = {
 }
 
 
-export default function MessageCard({ message, onMessageDelete}: MessageCardProps) {
+export default function MessageCard({ message, onMessageDelete }: MessageCardProps) {
 
     const handleDeleteConfirm = async () => {
         const response = await axios.delete<ApiResponse>(`/api/delete-message/${message._id}`);
@@ -44,34 +45,29 @@ export default function MessageCard({ message, onMessageDelete}: MessageCardProp
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Card Title</CardTitle>
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button variant="destructive"><X className="h-5 w-5" /></Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete your
-                                account and remove your data from our servers.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleDeleteConfirm}>Continue</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-                <CardDescription>Card Description</CardDescription>
-                <CardAction>Card Action</CardAction>
+                <div className="flex justify-between items-center">
+                    <CardTitle>{message.content}</CardTitle>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive" className="cursor-pointer"><X className="h-5 w-5" /></Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete your
+                                    account and remove your data from our servers.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleDeleteConfirm}>Continue</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </div>
+                <CardDescription>{dayjs(message.createdAt).format('MMM D, YYYY h:mm A')}</CardDescription>
             </CardHeader>
-            <CardContent>
-                <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-                <p>Card Footer</p>
-            </CardFooter>
         </Card>
     )
 }

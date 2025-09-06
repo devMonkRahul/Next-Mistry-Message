@@ -109,14 +109,14 @@ export default function Dashboard() {
 
             <div className="mb-4">
                 <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
-                <div className="flex items-center">
+                <div className="flex items-center bg-gray-300 dark:bg-input rounded-md">
                     <input
                         type="text"
                         value={profileUrl}
                         disabled
                         className="input input-bordered w-full p-2 mr-2"
                     />
-                    <Button onClick={copyToClipboard}>Copy</Button>
+                    <Button onClick={copyToClipboard} className="cursor-pointer">Copy</Button>
                 </div>
             </div>
 
