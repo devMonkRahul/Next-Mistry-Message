@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/config/connectDB";
@@ -10,12 +10,15 @@ export const authOptions: NextAuthOptions = {
             id: "credentials",
             name: "Credentials",
             credentials: {
-                email: { label: "Email", type: "text" },
+                identifier: { label: "Email or Username", type: "text" },
                 password: { label: "Password", type: "password" },
             },
-            async authorize(credentials: any): Promise<any> {
+            async authorize(credentials: Record<"identifier" | "password", string> | undefined): Promise<User | null> {
                 await dbConnect();
                 try {
+                    if (!credentials) {
+                        return null;
+                    }
                     const user = await UserModel.findOne({
                         $or: [
                             { email: credentials.identifier },
@@ -42,9 +45,11 @@ export const authOptions: NextAuthOptions = {
                         throw new Error("Incorrect password");
                     }
 
-                    return user;
-                } catch (error: any) {
-                    throw new Error(error);
+                    // Return a user object that is compatible with NextAuth's User type
+                    return user as User;
+                } catch (error) {
+                    // The authorize callback is expected to throw an error on failure
+                    throw error;
                 }
             },
         }),

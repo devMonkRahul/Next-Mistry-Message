@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 import * as z from 'zod';
 
 
-export default function page() {
+export default function SignIn() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const router = useRouter();

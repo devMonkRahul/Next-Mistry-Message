@@ -4,7 +4,7 @@ import dbConnect from "@/config/connectDB";
 import UserModel from "@/model/User.model";
 import { User } from "next-auth";
 
-export async function DELETE(request: Request, { params }: { params: { messageId: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ messageId: string }> }) {
     await dbConnect();
 
     const session = await getServerSession(authOptions);
@@ -21,7 +21,7 @@ export async function DELETE(request: Request, { params }: { params: { messageId
             }
         );
     }
-    
+
     const { messageId } = await params;
 
     try {

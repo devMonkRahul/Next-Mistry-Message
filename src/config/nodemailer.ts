@@ -19,7 +19,7 @@ export async function sendEmail(to: string, subject: string, text: string, html:
             text,
             html,
         })
-    } catch (error: any) {
+    } catch (error) {
         console.log("Error in sending email: ", error);
         throw new Error("Error in sending email")
     }
