@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mistry Message
+
+A modern Next.js application that allows users to send and receive anonymous messages with AI-powered suggestions.
+
+## Features
+
+- **User Authentication**: Secure signup and signin with email verification
+- **Anonymous Messaging**: Send anonymous messages to registered users
+- **Message Management**: View, accept, and delete received messages
+- **AI-Powered Suggestions**: Get message suggestions using Google's AI models
+- **Responsive Design**: Works seamlessly on all devices
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, Tailwind CSS 4
+- **Backend**: Next.js API Routes, MongoDB with Mongoose
+- **Authentication**: NextAuth.js
+- **Validation**: Zod, React Hook Form
+- **Email**: Nodemailer, Resend, React Email
+- **AI**: AI SDK with Google integration
+- **Styling**: Tailwind CSS, Radix UI components
+- **Deployment**: Vercel (recommended)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+ and npm/yarn/pnpm
+- MongoDB database
+- Google AI API key (for message suggestions)
+- Email service credentials (for verification emails)
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/devMonkRahul/Next-Mistry-Message.git
+   cd Next-Mistry-Message
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Create a `.env.local` file in the root directory with the following variables:
+   ```
+   # MongoDB
+   MONGODB_URI=your_mongodb_connection_string
+
+   # NextAuth
+   NEXTAUTH_SECRET=your_nextauth_secret
+   NEXTAUTH_URL=http://localhost:3000
+
+   # Email (Choose one: Nodemailer or Resend)
+   # For Nodemailer
+   EMAIL_SERVER_USER=your_email
+   EMAIL_SERVER_PASSWORD=your_email_password
+   EMAIL_SERVER_HOST=smtp.example.com
+   EMAIL_SERVER_PORT=587
+   EMAIL_FROM=your_email
+
+   # For Resend
+   RESEND_API_KEY=your_resend_api_key
+
+   # Google AI
+   GOOGLE_AI_API_KEY=your_google_ai_api_key
+   ```
+
+4. Run the development server
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Project Structure
+
+```
+src/
+├── app/                   # Next.js App Router
+│   ├── (app)/             # Main application routes
+│   ├── (auth)/            # Authentication routes
+│   ├── api/               # API routes
+│   └── u/                 # User profile routes
+├── components/            # React components
+│   └── ui/                # UI components
+├── config/                # Configuration files
+├── context/               # React context providers
+├── lib/                   # Utility libraries
+├── model/                 # MongoDB models
+├── schemas/               # Zod validation schemas
+├── types/                 # TypeScript type definitions
+└── utils/                 # Utility functions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## License
 
-## Learn More
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-To learn more about Next.js, take a look at the following resources:
+## Acknowledgments
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js](https://nextjs.org/)
+- [React](https://reactjs.org/)
+- [MongoDB](https://www.mongodb.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Radix UI](https://www.radix-ui.com/)
